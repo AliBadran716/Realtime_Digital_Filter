@@ -21,9 +21,17 @@ class MainApp(QMainWindow, FORM_CLASS):
     def __init__(self, parent=None):
         super(MainApp, self).__init__(parent)
         self.setupUi(self)
-        self.handle_button()
+        self.handle_buttons()
+        self.zeros = [] # list of tuples (real, imaginary)
+        self.poles = []
+        self.gain = 1
+        self.is_zeros = True
 
-    def handle_button(self):
+
+    def handle_buttons(self):
+        pass
+
+    def handle_graphs(self):
         pass
 
 
