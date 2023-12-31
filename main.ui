@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>945</width>
-    <height>600</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,10 +100,10 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGraphicsView" name="magnitude_plot"/>
+         <widget class="PlotWidget" name="magnitude_plot"/>
         </item>
         <item>
-         <widget class="QGraphicsView" name="phase_plot"/>
+         <widget class="PlotWidget" name="phase_plot"/>
         </item>
        </layout>
       </item>
@@ -147,7 +147,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QGraphicsView" name="graphicsView"/>
+         <widget class="PlotWidget" name="graphicsView"/>
         </item>
        </layout>
       </item>
@@ -161,7 +161,7 @@
      <x>0</x>
      <y>0</y>
      <width>945</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -172,6 +172,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header>pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
