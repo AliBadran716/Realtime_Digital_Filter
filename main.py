@@ -11,6 +11,16 @@ import pandas as pd
 import os
 import sys
 from os import path
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+import pyqtgraph as pg
+import numpy as np
+from os import path
+from scipy import signal
+
+from filter import Filter
 
 FORM_CLASS, _ = loadUiType(
     path.join(path.dirname(__file__), "main.ui")
@@ -28,6 +38,19 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.is_zeros = True
         self.handle_graphs()
         self.set_scene()
+        self.handle_graphs()
+        # self.filter = Filter()
+        # self.filter.set_filter_components([1j, 1], [-0.5 - 0.5j], 1)
+        # frequency, magnitude, phase = self.filter.get_frequency_response()
+        # self.plot_frequency_response(frequency, magnitude, phase)
+
+    def handle_graphs(self):
+        self.magnitude_plot.plotItem.setTitle("Magnitude Response")
+        self.magnitude_plot.plotItem.setLabel('left', 'Magnitude (dB)')
+        self.magnitude_plot.plotItem.setLabel('bottom', 'Frequency (rad/sample)')
+        self.phase_plot.plotItem.setTitle("Phase Response")
+        self.phase_plot.plotItem.setLabel('left', 'Phase (radians)')
+        self.phase_plot.plotItem.setLabel('bottom', 'Frequency (rad/sample)')
 
     def set_scene(self):
         self.scene = QGraphicsScene(self)
@@ -41,10 +64,25 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.mousePressEvent = self.mousePressEvent
         # self.verticalLayout.addWidget(self.z_plane_plot_1)
 
-    def handle_buttons(self):
-        pass
 
-    def handle_graphs(self):
+
+    def plot_frequency_response(self, frequency, magnitude, phase):
+        # Plot magnitude response
+        self.magnitude_plot.plot(frequency, magnitude, pen='b', clear=True)
+        # Set labels and title
+        self.magnitude_plot.setLabel('left', 'Magnitude (dB)')
+        self.magnitude_plot.setLabel('bottom', 'Frequency')
+        self.magnitude_plot.setTitle('Frequency Response - Magnitude')
+
+        # Plot phase response
+        self.phase_plot.plot(frequency, phase, pen='r', clear=True)
+        # Set labels and title
+        self.phase_plot.setLabel('left', 'Phase (radians)')
+        self.phase_plot.setLabel('bottom', 'Frequency')
+        self.phase_plot.setTitle('Frequency Response - Phase')
+
+
+    def handle_buttons(self):
         pass
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
