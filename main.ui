@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>621</height>
+    <width>1357</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,6 +75,9 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
+         <widget class="QWidget" name="widget" native="true"/>
+        </item>
+        <item>
          <widget class="QPushButton" name="generate_signal_btn">
           <property name="text">
            <string>Generate Signal</string>
@@ -91,7 +94,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QGraphicsView" name="graphicsView_2"/>
+       <widget class="PlotWidget" name="graphicsView_2"/>
       </item>
      </layout>
     </item>
@@ -160,7 +163,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>945</width>
+     <width>1357</width>
      <height>26</height>
     </rect>
    </property>

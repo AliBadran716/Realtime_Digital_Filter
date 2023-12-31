@@ -39,6 +39,11 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.handle_graphs()
         self.set_scene()
         self.handle_graphs()
+        self.last_pos = None
+        self.time = np.arange(0, 1, 0.1)
+        self.frequency = 0
+        self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
+        self.signal_list = []
         # self.filter = Filter()
         # self.filter.set_filter_components([1j, 1], [-0.5 - 0.5j], 1)
         # frequency, magnitude, phase = self.filter.get_frequency_response()
@@ -93,6 +98,35 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.scene.addItem(point)
         # Print the coordinates of the clicked point
         print(f"Clicked at: ({pos.x()}, {pos.y()})")
+
+    def widget_mouseMoveEvent(self, event):
+        # print(event.pos())
+        if self.last_pos:
+            # Calculate mouse speed
+            delta_x = event.x() - self.last_pos.x()
+            delta_y = event.y() - self.last_pos.y()
+            speed = (delta_x**2 + delta_y**2)**0.5
+
+            # Update frequency based on speed
+            self.frequency = int(speed)  # Adjust this factor to control the sensitivity
+
+            # Display mouse information
+            # print(f"Mouse Speed: {speed:.2f} | Frequency: {self.frequency}")
+
+            # Generate arbitrary signal based on frequency
+            signal = self.generate_arbitrary_signal(self.time, self.frequency,event.x())
+            self.signal_list = self.signal_list + list(signal)
+            self.graphicsView_2.clear()
+            self.graphicsView_2.plot(self.signal_list)
+
+            # Do something with the generated signal if needed
+
+        self.last_pos = event.pos()
+
+
+    def generate_arbitrary_signal(self, time, frequency,mag):
+
+        return mag*(np.sin(2 * np.pi * frequency * time) + np.sin(2 * np.pi * 2 * frequency * time)) / 2
 
 
 def main():  # method to start app
