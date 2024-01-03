@@ -19,8 +19,8 @@ import pyqtgraph as pg
 import numpy as np
 from os import path
 from scipy import signal
-
 from filter import Filter
+from z_plane import z_plane_plot
 
 FORM_CLASS, _ = loadUiType(
     path.join(path.dirname(__file__), "main.ui")
@@ -37,13 +37,13 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.gain = 1
         self.is_zeros = True
         self.handle_graphs()
-        self.set_scene()
         self.handle_graphs()
         self.last_pos = None
         self.time = np.arange(0, 1, 0.1)
         self.frequency = 0
         self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
         self.signal_list = []
+        self.zplane = z_plane_plot(self.z_plane_plot)
         # self.filter = Filter()
         # self.filter.set_filter_components([1j, 1], [-0.5 - 0.5j], 1)
         # frequency, magnitude, phase = self.filter.get_frequency_response()
@@ -57,17 +57,6 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.phase_plot.plotItem.setLabel('left', 'Phase (radians)')
         self.phase_plot.plotItem.setLabel('bottom', 'Frequency (rad/sample)')
 
-    def set_scene(self):
-        self.scene = QGraphicsScene(self)
-        self.z_plane_plot.setScene(self.scene)
-        unit_circle = QGraphicsEllipseItem(-50, -50, 100, 100)
-        self.scene.addItem(unit_circle)
-
-        # Increase the scene size
-        self.scene.setSceneRect(-100, -100, 200, 200)
-        # Set up the view
-        self.mousePressEvent = self.mousePressEvent
-        # self.verticalLayout.addWidget(self.z_plane_plot_1)
 
 
 
@@ -89,15 +78,6 @@ class MainApp(QMainWindow, FORM_CLASS):
 
     def handle_buttons(self):
         pass
-
-    def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
-        # Get the mouse click position
-        pos = self.z_plane_plot.mapToScene(event.pos())
-        # Draw a point at the clicked position
-        point = QGraphicsEllipseItem(pos.x() - 325, pos.y() - 50, 5, 5)
-        self.scene.addItem(point)
-        # Print the coordinates of the clicked point
-        print(f"Clicked at: ({pos.x()}, {pos.y()})")
 
     def widget_mouseMoveEvent(self, event):
         # print(event.pos())
