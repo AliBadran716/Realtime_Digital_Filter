@@ -24,6 +24,9 @@ class z_plane_plot():
         self.widget = widget
         self.zeros = {}
         self.poles = {}
+        self.selected_marker = None
+        self.move_marker = False
+        self.conjugate = False
 
         # Set up the z-plane plot
         self.setup_z_plane()
@@ -64,28 +67,109 @@ class z_plane_plot():
         self.widget.showGrid(x=True, y=True)
 
     def mouse_clicked(self, event):
-        # Get the coordinates of the mouse click in the z-plane
-        pos = self.widget.mapToView(event.pos())
-        x, y = pos.x(), pos.y()
+        # Get the coordinates of the click
+        x = self.widget.plotItem.vb.mapSceneToView(event.scenePos()).x()
+        y = self.widget.plotItem.vb.mapSceneToView(event.scenePos()).y()
         print('x: ', x, 'y: ', y)
-        
 
+        # Unhighlight the previously selected marker
+        self.unhighlight_marker()
 
-        # Check if the click is inside the unit circle
-        if x ** 2 + y ** 2 <= 1:
-            # Check if the click is close to any existing zero or pole
-            for position, markers in {'zeros': self.zeros, 'poles': self.poles}.items():
-                for marker, coords in markers.items():
-                    if np.abs(x - coords[0]) < 0.1 and np.abs(y - coords[1]) < 0.1:
-                        # Click is close to an existing marker, do nothing
-                        return
+        # Check if the click is close to any existing zero or pole
+        for position, markers in {'zeros': self.zeros, 'poles': self.poles}.items():
+            for index, (marker, coords) in markers.items():
+                if np.abs(x - coords[0]) < 0.15 and np.abs(y - coords[1]) < 0.15:
+                    # Click is close to an existing marker, select it and highlight it with a blue border
+                    self.selected_marker = (position, index, marker)
+                    self.highlight_marker(marker)
+                    return
 
-            # Add a new marker based on left or right mouse button press
-            if event.button() == 1:  # Left button for zeros
-                marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='o', pen='w')
+        if self.move_marker:
+            # Move the selected marker to the new location
+            position, index, marker = self.selected_marker
+            if position == 'zeros':
+                self.zeros[index] = (marker, (x, y))
+            elif position == 'poles':
+                self.poles[index] = (marker, (x, y))
+            # Update the marker's position and plot
+            marker.setData(pos=np.array([[x, y]]))
+            self.highlight_marker(marker)
+            return
+
+        # Add a new marker based on left or right mouse button press
+        if event.button() == 1:  # Left button for zeros
+            marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='o', pen='w')
+            self.widget.addItem(marker)
+            index = len(self.zeros) + 1
+            self.zeros[index] = (marker, (x, y))
+            self.selected_marker = ('zeros', index, marker)
+            self.highlight_marker(marker)
+            if self.conjugate:
+                marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='o', pen='w')
                 self.widget.addItem(marker)
-                self.zeros[len(self.zeros) + 1] = (x, y)
-            elif event.button() == 2:  # Right button for poles
-                marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='x', pen='w')
+                index = len(self.zeros) + 1
+                self.zeros[index] = (marker, (x, -y))
+
+        elif event.button() == 2:  # Right button for poles
+            marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='x', pen='w')
+            self.widget.addItem(marker)
+            index = len(self.poles) + 1
+            self.poles[index] = (marker, (x, y))
+            self.selected_marker = ('poles', index, marker)
+            self.highlight_marker(marker)
+            if self.conjugate:
+                marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='x', pen='w')
                 self.widget.addItem(marker)
-                self.poles[len(self.poles) + 1] = (x, y)
+                index = len(self.poles) + 1
+                self.poles[index] = (marker, (x, -y))
+    def highlight_marker(self, marker):
+        """Highlight the selected marker with a blue border."""
+        if self.selected_marker is not None:
+            position, index, marker = self.selected_marker
+            if position == 'zeros':
+                self.zeros[index][0].setPen(pg.mkPen('b', width=2))
+            elif position == 'poles':
+                self.poles[index][0].setPen(pg.mkPen('b', width=2))
+
+    def unhighlight_marker(self):
+        """Unhighlight the previously selected marker."""
+        if self.selected_marker is not None:
+            position, index, marker = self.selected_marker
+            if position == 'zeros':
+                self.zeros[index][0].setPen(pg.mkPen('w'))
+            elif position == 'poles':
+                self.poles[index][0].setPen(pg.mkPen('w'))
+
+    def delete_selected_marker(self, to_be_deleted):
+        """Delete the selected markers."""
+        if to_be_deleted == "Selected" and self.selected_marker is not None:
+            position, index, marker = self.selected_marker
+            if position == 'zeros':
+                self.delete_marker('zeros', index)
+            elif position == 'poles':
+                self.delete_marker('poles', index)
+            self.selected_marker = None
+        elif to_be_deleted == "All zeros":
+            self.delete_all_markers('zeros')
+        elif to_be_deleted == "All poles":
+            self.delete_all_markers('poles')
+        elif to_be_deleted == "Both":
+            self.delete_all_markers('zeros')
+            self.delete_all_markers('poles')
+
+    def delete_marker(self, position, index):
+        """Delete a single marker."""
+        if position == 'zeros' and index in self.zeros:
+            self.widget.removeItem(self.zeros[index][0])
+            del self.zeros[index]
+        elif position == 'poles' and index in self.poles:
+            self.widget.removeItem(self.poles[index][0])
+            del self.poles[index]
+
+    def delete_all_markers(self, position):
+        """Delete all markers of a given type."""
+        markers_dict = self.zeros if position == 'zeros' else self.poles
+        for index in markers_dict.copy():
+            self.widget.removeItem(markers_dict[index][0])
+            del markers_dict[index]
+        self.selected_marker = None

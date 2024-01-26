@@ -77,7 +77,10 @@ class MainApp(QMainWindow, FORM_CLASS):
 
 
     def handle_buttons(self):
-        pass
+        self.delete_btn.clicked.connect(self.delete)
+        self.move_btn.clicked.connect(self.move_marker)
+        self.conjugate_check_box.stateChanged.connect(self.conjugate)
+
 
     def widget_mouseMoveEvent(self, event):
         # print(event.pos())
@@ -107,6 +110,21 @@ class MainApp(QMainWindow, FORM_CLASS):
     def generate_arbitrary_signal(self, time, frequency,mag):
 
         return mag*(np.sin(2 * np.pi * frequency * time) + np.sin(2 * np.pi * 2 * frequency * time)) / 2
+
+    def delete(self):
+        to_be_deleted = self.selected_combo_box.currentText()
+        self.zplane.delete_selected_marker(to_be_deleted)
+
+    def move_marker(self):
+        if self.move_btn.text() == "Move":
+            self.move_btn.setText("Add")
+            self.zplane.move_marker = True
+        else:
+            self.move_btn.setText("Move")
+            self.zplane.move_marker = False
+
+    def conjugate(self):
+        self.zplane.conjugate = self.conjugate_check_box.isChecked()
 
 
 def main():  # method to start app
