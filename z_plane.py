@@ -28,34 +28,64 @@ class z_plane_plot():
         # Set up the z-plane plot
         self.setup_z_plane()
 
+        # Connect mouse press event to the function
+        self.widget.scene().sigMouseClicked.connect(self.mouse_clicked)
+
     def setup_z_plane(self):
-        # Create a complex grid of points
-        real_vals = np.linspace(-1, 1, 400)
-        imag_vals = np.linspace(-1j, 1j, 400)
-        real, imag = np.meshgrid(real_vals, imag_vals)
-        z_plane = real + imag
+        """Set up the z-plane plot."""
+        # Create the z-plane plot
+        self.widget.setBackground('black')
+        self.widget.setLabel('left', 'Imaginary')
+        self.widget.setLabel('bottom', 'Real')
+        self.widget.setXRange(-1.5, 1.5, padding=0)
+        self.widget.setYRange(-1.5, 1.5, padding=0)
+        self.widget.showGrid(True, True, 0.5)
+        self.widget.setMouseEnabled(x=False, y=False)
+        self.widget.setMenuEnabled(False)
+        self.widget.setMouseEnabled(x=False, y=False)
+        self.widget.hideButtons()
+        # Add Title
+        self.widget.setTitle("Z-Plane Plot", color="w", size="12pt")
+        # Plot real and imaginary axes
+        self.widget.plot([0, 0], [-1, 1], pen=pg.mkPen('w'))  # Real axis
+        self.widget.plot([-1, 1], [0, 0], pen=pg.mkPen('w'))  # Imaginary axis
 
-        # Plot the infinite real and imaginary axes
-        self.widget.plot([-np.inf, np.inf], [0, 0], pen='w')  # Real axis
-        self.widget.plot([0, 0], [-np.inf, np.inf], pen='w')  # Imaginary axis
+        # Plot the unit circle
+        theta = np.linspace(0, 2 * np.pi, 100)
+        x = np.cos(theta)
+        y = np.sin(theta)
+        self.widget.plot(x, y, pen=pg.mkPen('r'))
 
-        # Create circle ROIs to show the unit circle and an additional circle of radius 2
-        self.roi_unitCircle = pg.CircleROI([-1, -1], [2, 2], pen=pg.mkPen('r', width=2), movable=False, resizable=False,
-                                           rotatable=False)
-
-        # Set the origin point to the center of the widget
-        self.plot_unitCircle.setYRange(-1.1, 1.1, padding=0)
-        self.plot_unitCircle.setXRange(-1.1, 1.1, padding=0)
-        self.plot_unitCircle.setMouseEnabled(x=False, y=False)
-
-        self.plot_unitCircle.addItem(self.roi_unitCircle)
-        self.roi_unitCircle.removeHandle(0)
-
-        # Plot the z-plane surface
-        surf = pg.PlotDataItem(z_plane.real, z_plane.imag, np.zeros_like(z_plane), symbol='o', size=5, pen=None)
-        self.widget.addItem(surf)
+        # Set axis labels
+        self.widget.setLabel('left', "Imaginary")
+        self.widget.setLabel('bottom', "Real")
 
         # Add a grid
-        self.widget.showGrid(True, True, alpha=0.3)
+        self.widget.showGrid(x=True, y=True)
+
+    def mouse_clicked(self, event):
+        # Get the coordinates of the mouse click in the z-plane
+        pos = self.widget.mapToView(event.pos())
+        x, y = pos.x(), pos.y()
+        print('x: ', x, 'y: ', y)
+        
 
 
+        # Check if the click is inside the unit circle
+        if x ** 2 + y ** 2 <= 1:
+            # Check if the click is close to any existing zero or pole
+            for position, markers in {'zeros': self.zeros, 'poles': self.poles}.items():
+                for marker, coords in markers.items():
+                    if np.abs(x - coords[0]) < 0.1 and np.abs(y - coords[1]) < 0.1:
+                        # Click is close to an existing marker, do nothing
+                        return
+
+            # Add a new marker based on left or right mouse button press
+            if event.button() == 1:  # Left button for zeros
+                marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='o', pen='w')
+                self.widget.addItem(marker)
+                self.zeros[len(self.zeros) + 1] = (x, y)
+            elif event.button() == 2:  # Right button for poles
+                marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='x', pen='w')
+                self.widget.addItem(marker)
+                self.poles[len(self.poles) + 1] = (x, y)
