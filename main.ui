@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1186</width>
-    <height>856</height>
+    <width>876</width>
+    <height>614</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,97 +16,108 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QComboBox" name="selected_combo_box">
+           <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <property name="text">
-              <string>Selected</string>
-             </property>
+             <widget class="QComboBox" name="selected_combo_box">
+              <item>
+               <property name="text">
+                <string>Selected</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>All zeros</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>All poles</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Both</string>
+               </property>
+              </item>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>All zeros</string>
-             </property>
+             <widget class="QPushButton" name="delete_btn">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>All poles</string>
-             </property>
+             <widget class="QPushButton" name="move_btn">
+              <property name="text">
+               <string>Move</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <property name="text">
-              <string>Both</string>
-             </property>
+             <widget class="QPushButton" name="apply_filter">
+              <property name="text">
+               <string>Apply</string>
+              </property>
+             </widget>
             </item>
-           </widget>
+            <item>
+             <widget class="QCheckBox" name="conjugate_check_box">
+              <property name="text">
+               <string>Add Conjugates</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="delete_btn">
-            <property name="text">
-             <string>Delete</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="move_btn">
-            <property name="text">
-             <string>Move</string>
-            </property>
-           </widget>
+           <widget class="PlotWidget" name="z_plane_plot"/>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="conjugate_check_box">
-          <property name="text">
-           <string>Add Conjugates</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QWidget" name="widget" native="true">
+              <property name="autoFillBackground">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="generate_signal_btn">
+              <property name="text">
+               <string>Generate Signal</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="upload_signal_btn">
+              <property name="text">
+               <string>Upload Signal</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="PlotWidget" name="graphicsView_2"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="PlotWidget" name="z_plane_plot"/>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout_5">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QWidget" name="widget" native="true"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="generate_signal_btn">
-          <property name="text">
-           <string>Generate Signal</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="upload_signal_btn">
-          <property name="text">
-           <string>Upload Signal</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="PlotWidget" name="graphicsView_2"/>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="PlotWidget" name="magnitude_plot"/>
         </item>
@@ -168,8 +179,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1186</width>
-     <height>26</height>
+     <width>876</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
