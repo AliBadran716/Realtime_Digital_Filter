@@ -132,7 +132,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         options |= QFileDialog.DontUseNativeDialog
         self.file_path, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
         if self.file_path:
-            self.signal_list = pd.read_csv(self.file_path,header=None)
+            self.signal_list = pd.read_csv(self.file_path, header=None)
             time = np.arange(0, len(self.signal_list))
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.signal_list[1])
@@ -140,7 +140,7 @@ class MainApp(QMainWindow, FORM_CLASS):
             # Apply the filter to the signal and plot the output
             filtered_signal = self.filter.apply_filter(self.signal_list)
             self.graphicsView.clear()
-            self.graphicsView.plot(filtered_signal)
+            self.graphicsView.plot(filtered_signal.real)
              
 
     def widget_mouseMoveEvent(self, event):
@@ -171,7 +171,7 @@ class MainApp(QMainWindow, FORM_CLASS):
             # Apply the filter to the signal and plot the output
             filtered_signal = self.filter.apply_filter(self.signal_list)
             self.graphicsView.clear()
-            self.graphicsView.plot(filtered_signal)
+            self.graphicsView.plot(filtered_signal.real)
 
 
         self.last_pos = event.pos()
@@ -210,7 +210,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         # Apply the filter to the signal and plot the output
         filtered_signal = self.filter.apply_filter(self.signal_list)
         self.graphicsView.clear()
-        self.graphicsView.plot(filtered_signal)
+        self.graphicsView.plot(filtered_signal.real)
         
 
 def main():  # method to start app
