@@ -9,13 +9,13 @@ class Filter():
         self.all_pass = []
 
     def add_pole(self, pole):
-        self.poles.append(pole)
+        self.poles = pole
 
     def add_zero(self, zero):
-        self.zeros.append(zero)
+        self.zeros = zero
 
     def add_all_pass(self, all_pass):
-        self.all_pass_append(all_pass)
+        self.all_pass.append(all_pass)
 
     def delete_pole(self, pole):
         """Delete a specific pole from the filter."""
@@ -48,25 +48,34 @@ class Filter():
         self.delete_all_passes()
 
     def get_poles(self):
-        original_poles = [complex(pole.real, pole.imag) for pole in self.poles]
-        all_pass_poles = [all_pass.a for all_pass in self.all_pass]
-        return [*original_poles, *all_pass_poles]
+        """Return the list of poles."""
+        return self.poles
+
 
     def get_zeros(self):
-        original_zeros = [complex(zero.real, zero.imag) for zero in self.zeros]
-        all_pass_zeros = [1 / np.conj(all_pass.a) for all_pass in self.all_pass]
-        return [*original_zeros, *all_pass_zeros]
+        """Return the list of zeros."""
+        return self.zeros
+
 
     def get_gain(self):
         return self.gain
 
     def get_response(self):
+        # Get the zeros and poles of the filter
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
+
+        # Calculate the frequency response using signal.freqz_zpk
         w, response = signal.freqz_zpk(zeros_values, poles_values, self.gain)
+
+        # Compute magnitude and phase of the frequency response
         magnitude = 20 * np.log10(np.abs(response))
         phase = np.unwrap(np.angle(response))
+
+        # Return frequency, magnitude, and phase
         return w, magnitude, phase
+
+
 
     def get_all_pass_response(self):
         zeros_values = self.get_zeros()
@@ -75,7 +84,3 @@ class Filter():
         magnitude = 20 * np.log10(np.abs(response))
         phase = np.unwrap(np.angle(response))
         return w, magnitude, phase
-    
-
-
-

@@ -10,20 +10,15 @@ import pandas as pd
 import os
 import sys
 from os import path
-from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from os import path
-import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import pyqtgraph as pg
 
 class z_plane_plot():
     def __init__(self, widget):
+        """Initialize the z-plane plot."""
         self.widget = widget
-        self.zeros = {}
-        self.poles = {}
+        self.zeros = []  # List of zero markers
+        self.poles = []  # List of pole markers
         self.selected_marker = None
         self.move_marker = False
         self.conjugate = False
@@ -67,17 +62,17 @@ class z_plane_plot():
         self.widget.showGrid(x=True, y=True)
 
     def mouse_clicked(self, event):
+        """Handle mouse click events."""
         # Get the coordinates of the click
         x = self.widget.plotItem.vb.mapSceneToView(event.scenePos()).x()
         y = self.widget.plotItem.vb.mapSceneToView(event.scenePos()).y()
-        print('x: ', x, 'y: ', y)
 
         # Unhighlight the previously selected marker
         self.unhighlight_marker()
 
         # Check if the click is close to any existing zero or pole
         for position, markers in {'zeros': self.zeros, 'poles': self.poles}.items():
-            for index, (marker, coords) in markers.items():
+            for index, (marker, coords) in enumerate(markers):
                 if np.abs(x - coords[0]) < 0.15 and np.abs(y - coords[1]) < 0.15:
                     # Click is close to an existing marker, select it and highlight it with a blue border
                     self.selected_marker = (position, index, marker)
@@ -100,28 +95,27 @@ class z_plane_plot():
         if event.button() == 1:  # Left button for zeros
             marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='o', pen='w')
             self.widget.addItem(marker)
-            index = len(self.zeros) + 1
-            self.zeros[index] = (marker, (x, y))
+            index = len(self.zeros)
+            self.zeros.append((marker, (x, y)))
             self.selected_marker = ('zeros', index, marker)
             self.highlight_marker(marker)
             if self.conjugate:
                 marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='o', pen='w')
                 self.widget.addItem(marker)
-                index = len(self.zeros) + 1
-                self.zeros[index] = (marker, (x, -y))
+                self.zeros.append((marker, (x, -y)))
 
         elif event.button() == 2:  # Right button for poles
             marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='x', pen='w')
             self.widget.addItem(marker)
-            index = len(self.poles) + 1
-            self.poles[index] = (marker, (x, y))
+            index = len(self.poles)
+            self.poles.append((marker, (x, y)))
             self.selected_marker = ('poles', index, marker)
             self.highlight_marker(marker)
             if self.conjugate:
                 marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='x', pen='w')
                 self.widget.addItem(marker)
-                index = len(self.poles) + 1
-                self.poles[index] = (marker, (x, -y))
+                self.poles.append((marker, (x, -y)))
+
     def highlight_marker(self, marker):
         """Highlight the selected marker with a blue border."""
         if self.selected_marker is not None:
@@ -159,17 +153,41 @@ class z_plane_plot():
 
     def delete_marker(self, position, index):
         """Delete a single marker."""
-        if position == 'zeros' and index in self.zeros:
-            self.widget.removeItem(self.zeros[index][0])
-            del self.zeros[index]
-        elif position == 'poles' and index in self.poles:
-            self.widget.removeItem(self.poles[index][0])
-            del self.poles[index]
+        markers_list = self.zeros if position == 'zeros' else self.poles
+        if 0 <= index < len(markers_list):
+            marker, _ = markers_list.pop(index)
+            self.widget.removeItem(marker)
 
     def delete_all_markers(self, position):
         """Delete all markers of a given type."""
-        markers_dict = self.zeros if position == 'zeros' else self.poles
-        for index in markers_dict.copy():
-            self.widget.removeItem(markers_dict[index][0])
-            del markers_dict[index]
+        markers_list = self.zeros if position == 'zeros' else self.poles
+        for marker, _ in markers_list:
+            self.widget.removeItem(marker)
+        markers_list.clear()
         self.selected_marker = None
+
+    def get_zeros(self):
+        """Return the list of zeros."""
+        complex_zeros = [complex(x, y) for _, (x, y) in self.zeros]
+        return complex_zeros
+
+
+
+
+    def get_poles(self):
+        """Return the list of poles."""
+        complex_poles = [complex(x, y) for _, (x, y) in self.poles]
+        return complex_poles
+     
+
+
+
+
+
+
+        
+        
+        
+        
+        
+    

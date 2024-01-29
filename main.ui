@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>876</width>
-    <height>614</height>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,7 +62,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="apply_filter">
+             <widget class="QPushButton" name="apply_filter_btn">
               <property name="text">
                <string>Apply</string>
               </property>
@@ -180,7 +180,7 @@
      <x>0</x>
      <y>0</y>
      <width>876</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

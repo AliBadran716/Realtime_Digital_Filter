@@ -80,7 +80,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.delete_btn.clicked.connect(self.delete)
         self.move_btn.clicked.connect(self.move_marker)
         self.conjugate_check_box.stateChanged.connect(self.conjugate)
-        self.apply_filter.clicked.connect(self.apply_filter)
+        self.apply_filter_btn.clicked.connect(self.apply_filter)
 
 
     def widget_mouseMoveEvent(self, event):
@@ -130,7 +130,14 @@ class MainApp(QMainWindow, FORM_CLASS):
     def apply_filter(self):
         zeros = self.zplane.get_zeros()
         poles = self.zplane.get_poles()
-        self.filter = Filter()
+        self.filter = Filter(gain=0.5)
+        self.filter.add_zero(zeros)
+        self.filter.add_pole(poles)
+        frequency, magnitude, phase = self.filter.get_response()
+        print(frequency)
+        print(magnitude)
+        print(phase)
+        self.plot_frequency_response(frequency, magnitude, phase)
         
 
 def main():  # method to start app
