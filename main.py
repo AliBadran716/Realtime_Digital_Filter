@@ -43,6 +43,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.frequency = 0
         self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
         self.signal_list = []
+        self.signal_mode = ""
         self.zplane = z_plane_plot(self.z_plane_plot)
         self.all_pass_filters = {}
         self.butterworthFilter = Filter(
@@ -135,10 +136,15 @@ class MainApp(QMainWindow, FORM_CLASS):
             time = np.arange(0, len(self.signal_list))
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.signal_list[1])
+            self.signal_mode = "upload"
              
 
     def widget_mouseMoveEvent(self, event):
         # print(event.pos())
+        if self.signal_mode == "upload":
+            self.graphicsView_2.clear()
+            self.signal_list = []
+            self.signal_mode = "draw"
         if self.last_pos:
             # Calculate mouse speed
             delta_x = event.x() - self.last_pos.x()
@@ -189,9 +195,9 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.filter.add_zero(zeros)
         self.filter.add_pole(poles)
         frequency, magnitude, phase = self.filter.get_response()
-        print(frequency)
-        print(magnitude)
-        print(phase)
+        # print(frequency)
+        # print(magnitude)
+        # print(phase)
         self.plot_frequency_response(frequency, magnitude, phase)
         
 
