@@ -45,6 +45,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.signal_list = []
         self.signal_mode = ""
         self.zplane = z_plane_plot(self.z_plane_plot)
+        self.filter = Filter(gain=0.5)
         self.all_pass_filters = {}
         self.butterworthFilter = Filter(
             poles=[0.66045672 + 0.44332349j, 0.66045672 - 0.44332349j, 0.52429979 + 0.1457741j, 0.52429979 - 0.1457741j],
@@ -199,7 +200,6 @@ class MainApp(QMainWindow, FORM_CLASS):
     def apply_filter(self):
         zeros = self.zplane.get_zeros()
         poles = self.zplane.get_poles()
-        self.filter = Filter(gain=0.5)
         self.filter.add_zero(zeros)
         self.filter.add_pole(poles)
         frequency, magnitude, phase = self.filter.get_response()

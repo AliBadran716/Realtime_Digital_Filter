@@ -6,23 +6,44 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1358</width>
-    <height>863</height>
+    <width>881</width>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QPushButton" name="apply_filter_btn">
+              <property name="text">
+               <string>Apply</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="move_btn">
+              <property name="text">
+               <string>Move</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="delete_btn">
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QComboBox" name="selected_combo_box">
               <item>
@@ -48,27 +69,6 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="delete_btn">
-              <property name="text">
-               <string>Delete</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="move_btn">
-              <property name="text">
-               <string>Move</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="apply_filter_btn">
-              <property name="text">
-               <string>Apply</string>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QCheckBox" name="conjugate_check_box">
               <property name="text">
                <string>Add Conjugates</string>
@@ -85,9 +85,6 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QComboBox" name="all_pass_lists"/>
-          </item>
-          <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="PlotWidget" name="magnitude_plot"/>
@@ -102,22 +99,18 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetFixedSize</enum>
+            </property>
             <item>
-             <widget class="QWidget" name="widget" native="true">
-              <property name="autoFillBackground">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="generate_signal_btn">
+             <widget class="QLabel" name="label">
               <property name="text">
-               <string>Generate Signal</string>
+               <string>Mouse Input</string>
               </property>
              </widget>
             </item>
@@ -130,13 +123,34 @@
             </item>
            </layout>
           </item>
-          <item>
-           <widget class="PlotWidget" name="graphicsView_2"/>
+          <item row="0" column="1" rowspan="2">
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QComboBox" name="all_pass_lists"/>
+            </item>
+            <item>
+             <widget class="QGraphicsView" name="all_pass_graph"/>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QWidget" name="widget" native="true">
+            <property name="autoFillBackground">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item>
-         <widget class="PlotWidget" name="graphicsView"/>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="PlotWidget" name="graphicsView_2"/>
+          </item>
+          <item>
+           <widget class="PlotWidget" name="graphicsView"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -149,8 +163,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1358</width>
-     <height>26</height>
+     <width>881</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>
