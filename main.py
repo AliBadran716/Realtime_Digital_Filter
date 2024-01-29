@@ -137,6 +137,10 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.signal_list[1])
             self.signal_mode = "upload"
+            # Apply the filter to the signal and plot the output
+            filtered_signal = self.filter.apply_filter(self.signal_list)
+            self.graphicsView.clear()
+            self.graphicsView.plot(filtered_signal)
              
 
     def widget_mouseMoveEvent(self, event):
@@ -164,7 +168,11 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.signal_list)
 
-            # Do something with the generated signal if needed
+            # Apply the filter to the signal and plot the output
+            filtered_signal = self.filter.apply_filter(self.signal_list)
+            self.graphicsView.clear()
+            self.graphicsView.plot(filtered_signal)
+
 
         self.last_pos = event.pos()
 
@@ -199,6 +207,10 @@ class MainApp(QMainWindow, FORM_CLASS):
         # print(magnitude)
         # print(phase)
         self.plot_frequency_response(frequency, magnitude, phase)
+        # Apply the filter to the signal and plot the output
+        filtered_signal = self.filter.apply_filter(self.signal_list)
+        self.graphicsView.clear()
+        self.graphicsView.plot(filtered_signal)
         
 
 def main():  # method to start app

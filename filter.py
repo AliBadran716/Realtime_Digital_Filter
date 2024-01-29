@@ -75,8 +75,6 @@ class Filter():
         # Return frequency, magnitude, and phase
         return w, magnitude, phase
 
-
-
     def get_all_pass_response(self):
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
@@ -84,3 +82,11 @@ class Filter():
         magnitude = 20 * np.log10(np.abs(response))
         phase = np.unwrap(np.angle(response))
         return w, magnitude, phase
+
+    # apply filter to signal
+    def apply_filter(self, signal):
+        zeros_values = self.get_zeros()
+        poles_values = self.get_poles()
+        b, a = signal.zpk2tf(zeros_values, poles_values, self.gain)
+        filtered_signal = signal.lfilter(b, a, signal)
+        return filtered_signal
