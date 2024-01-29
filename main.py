@@ -39,7 +39,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.handle_graphs()
         self.handle_graphs()
         self.last_pos = None
-        self.time = np.arange(0, 1, 0.1)
+        self.time = np.arange(0, 0.6, 0.2)
         self.frequency = 0
         self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
         self.signal_list = []
@@ -50,40 +50,40 @@ class MainApp(QMainWindow, FORM_CLASS):
             zeros=[-1.00021915 + 0j, -0.99999998 + 0.00021913j, -0.99999998 - 0.00021913j, -0.99978088 + 0j],
             gain=0.004824343357716228
         )
-        self.all_pass_filters.append({
-            'name': 'Butterworth',
-            'filter': self.butterworthFilter
-        })
+        # self.all_pass_filters.append({
+        #     'name': 'Butterworth',
+        #     'filter': self.butterworthFilter
+        # })
 
         self.chebyshev1Filter = Filter(
             poles=[0.78618897 + 0.53451727j, 0.78618897 - 0.53451727j, 0.84839427 + 0.2207097j, 0.84839427 - 0.2207097j],
             zeros=[-1.00021915 + 0j, -0.99999998 + 0.00021913j, -0.99999998 - 0.00021913j, -0.99978088 + 0j],
             gain=0.0010513933473130974
         )
-        self.all_pass_filters.append({
-            "name": "Chebyshev I Filter",
-            "filter": self.chebyshev1Filter
-        })
+        # self.all_pass_filters.append({
+        #     "name": "Chebyshev I Filter",
+        #     "filter": self.chebyshev1Filter
+        # })
 
         self.chebyshev2Filter = Filter(
             poles=[0.81412081 + 0.34216671j, 0.81412081 - 0.34216671j, 0.62125795 + 0.15717069j, 0.62125795 - 0.15717069j],
             zeros=[0.16218512 + 0.98676035j, 0.16218512 - 0.98676035j, 0.77985627 + 0.62595862j, 0.77985627 - 0.62595862j],
             gain=0.0345589375728779
         )
-        self.all_pass_filters.append({
-            "name": "Chebyshev II Filter",
-            "filter": self.chebyshev2Filter
-        })
+        # self.all_pass_filters.append({
+        #     "name": "Chebyshev II Filter",
+        #     "filter": self.chebyshev2Filter
+        # })
 
         self.ellipticFilter = Filter(
             poles=[0.79589405 + 0.56264606j, 0.79589405 - 0.56264606j, 0.80810983 + 0.29172164j, 0.80810983 - 0.29172164j],
             zeros=[0.2901308 + 0.956987j, 0.2901308 - 0.956987j, 0.73976805 + 0.67286197j, 0.73976805 - 0.67286197j],
             gain=0.041845590593020045
         )
-        self.all_pass_filters.append({
-            "name": "Elliptic Filter",
-            "filter": self.ellipticFilter
-        })
+        # self.all_pass_filters.append({
+        #     "name": "Elliptic Filter",
+        #     "filter": self.ellipticFilter
+        # })
         # self.filter = Filter()
         # self.filter.set_filter_components([1j, 1], [-0.5 - 0.5j], 1)
         # frequency, magnitude, phase = self.filter.get_frequency_response()
@@ -121,7 +121,21 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.move_btn.clicked.connect(self.move_marker)
         self.conjugate_check_box.stateChanged.connect(self.conjugate)
         self.apply_filter_btn.clicked.connect(self.apply_filter)
+        
+        self.upload_signal_btn.clicked.connect(self.upload_signal)
 
+
+
+    def upload_signal(self ):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.file_path, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        if self.file_path:
+            self.signal_list = pd.read_csv(self.file_path,header=None)
+            time = np.arange(0, len(self.signal_list))
+            self.graphicsView_2.clear()
+            self.graphicsView_2.plot(self.signal_list[1])
+             
 
     def widget_mouseMoveEvent(self, event):
         # print(event.pos())
@@ -139,6 +153,7 @@ class MainApp(QMainWindow, FORM_CLASS):
 
             # Generate arbitrary signal based on frequency
             signal = self.generate_arbitrary_signal(self.time, self.frequency,event.x())
+            
             self.signal_list = self.signal_list + list(signal)
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.signal_list)
