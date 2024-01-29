@@ -84,9 +84,9 @@ class Filter():
         return w, magnitude, phase
 
     # apply filter to signal
-    def apply_filter(self, signal):
+    def apply_filter(self, input_signal):
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
         b, a = signal.zpk2tf(zeros_values, poles_values, self.gain)
-        filtered_signal = signal.lfilter(b, a, signal)
+        filtered_signal = signal.lfilter(b, a, input_signal)
         return filtered_signal
