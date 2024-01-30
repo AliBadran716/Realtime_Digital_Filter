@@ -124,7 +124,7 @@ class MainApp(QMainWindow, FORM_CLASS):
 
     def handle_buttons(self):
         self.delete_btn.clicked.connect(self.delete)
-        self.move_btn.clicked.connect(self.move_marker)
+        # self.move_btn.clicked.connect(self.move_marker)
         self.conjugate_check_box.stateChanged.connect(self.conjugate)
         self.apply_filter_btn.clicked.connect(self.apply_filter)
         self.upload_signal_btn.clicked.connect(self.upload_signal)

@@ -79,7 +79,8 @@ class z_plane_plot():
                     self.highlight_marker(marker)
                     return
 
-        if self.move_marker:
+        # move at the middle mouse button click
+        if event.button() != 1 and event.button() != 2:
             # Move the selected marker to the new location
             position, index, marker = self.selected_marker
             if position == 'zeros':
