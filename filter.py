@@ -50,11 +50,16 @@ class Filter():
 
     def get_poles(self):
         """Return the list of poles."""
+        for all_pass in self.all_pass:
+            self.poles.append(all_pass)
         return self.poles
 
 
     def get_zeros(self):
         """Return the list of zeros."""
+        all_pass_zeros = [1 / np.conj(all_pass) for all_pass in self.all_pass]
+        for zeros in all_pass_zeros:
+            self.zeros.append(zeros)
         return self.zeros
 
 
@@ -111,8 +116,8 @@ class Filter():
         for point in np.linspace(0,np.pi, 100):
             numerator = 0
             denominator = 0
-            y = cos(point)
-            x = sin(point)
+            y = sin(point)
+            x = cos(point)
             point = complex(x, y)
             for zero in zeros_values:
                 numerator += self.calculate_phase(zero, point)
@@ -125,17 +130,31 @@ class Filter():
     def calculate_phase(self, point1, point2):
         return np.arctan2(point1.imag - point2.imag, point1.real - point2.real)
 
-
-    def get_all_pass_response(self):
-        zeros_values = self.get_zeros()
-        poles_values = self.get_poles()
-        w, response = signal.freqz_zpk(zeros_values, poles_values, self.gain)
-        magnitude = 20 * np.log10(np.abs(response))
-        phase = np.unwrap(np.angle(response))
-        return w, magnitude, phase
+    def get_all_pass_phase_response(self):
+        # Get the zeros and poles of the filter
+        all_pass_poles = self.all_pass
+        all_pass_zeros = [1 / np.conj(all_pass) for all_pass in self.all_pass]
+        phase = []
+        freqs = []
+        # loop on the unit circle
+        for point in np.linspace(0, np.pi, 100):
+            numerator = 0
+            denominator = 0
+            y = sin(point)
+            x = cos(point)
+            freqs.append(point)
+            point = complex(x, y)
+            for all_pass in all_pass_zeros:
+                numerator += self.calculate_phase(all_pass, point)
+            for all_pass in all_pass_poles:
+                denominator -= self.calculate_phase(all_pass, point)
+            phase.append(numerator + denominator)
+        return phase, freqs
 
     # apply filter to signal
     def apply_filter(self, input_signal):
+        if input_signal is None:
+            return None
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
         b, a = signal.zpk2tf(zeros_values, poles_values, 1)

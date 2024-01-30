@@ -18,9 +18,11 @@ from PyQt5.QtGui import *
 import pyqtgraph as pg
 import numpy as np
 from os import path
+import time
 from scipy import signal
 from filter import Filter
 from z_plane import z_plane_plot
+
 
 FORM_CLASS, _ = loadUiType(
     path.join(path.dirname(__file__), "main.ui")
@@ -41,12 +43,18 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.last_pos = None
         self.time = np.arange(0, 0.6, 0.2)
         self.frequency = 0
-        self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
+        self.widget.mouseMoveEvent = lambda event: self.delayed_mouse_move_event(event, 0.1)
         self.signal_list = []
         self.signal_mode = "upload"
         self.zplane = z_plane_plot(self.z_plane_plot)
         self.filter = Filter(gain=1)
         self.all_pass_filters = {}
+        self.set_all_pass_filter()
+        self.all_pass_graph.setBackground('black')
+        self.all_pass_graph.setLabel('left', 'Phase (radians)')
+        self.all_pass_graph.setLabel('bottom', 'Frequency')
+        self.all_pass_graph.setTitle('All Pass Phase Response')
+
         self.butterworthFilter = Filter(
             poles=[0.66045672 + 0.44332349j, 0.66045672 - 0.44332349j, 0.52429979 + 0.1457741j, 0.52429979 - 0.1457741j],
             zeros=[-1.00021915 + 0j, -0.99999998 + 0.00021913j, -0.99999998 - 0.00021913j, -0.99978088 + 0j],
@@ -119,10 +127,45 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.move_btn.clicked.connect(self.move_marker)
         self.conjugate_check_box.stateChanged.connect(self.conjugate)
         self.apply_filter_btn.clicked.connect(self.apply_filter)
-        
         self.upload_signal_btn.clicked.connect(self.upload_signal)
+        for i in range(5):
+            getattr(self, 'all_pass_filter_' + str(i+1)).clicked.connect(self.update_all_pass_filter)
 
+    def set_all_pass_filter(self):
+        all_pass_list = [
+            0.7,
+            0.7j,
+            0.1 + 0.7j,
+            1 + 2j,
+            0.3 + 0.2j,
+        ]
+        for i in range(5):
+            print(i)
+            self.all_pass_filters['all_pass_filter_' + str(i+1)] = [all_pass_list[i], getattr(self, 'all_pass_filter_' + str(i+1)).isChecked()]
+        print(self.all_pass_filters)
 
+    def update_all_pass_filter(self):
+        self.set_all_pass_filter()
+        self.filter.delete_all_components()
+        for key, value in self.all_pass_filters.items():
+            if value[1]:
+                self.filter.add_all_pass(value[0])
+        frequency, magnitude, phase = self.filter.get_response()
+        self.plot_frequency_response(frequency, magnitude, phase)
+
+        # Plot the all pass phase response
+        all_pass_phase, all_pass_freqs = self.filter.get_all_pass_phase_response()
+        self.all_pass_graph.plot(all_pass_freqs, all_pass_phase, pen='r', clear=True)
+        if len(self.signal_list) >= 1:
+            # Apply the filter to the signal and plot the output
+            if self.signal_mode == "draw":
+                filtered_signal = self.filter.apply_filter(self.signal_list)
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.signal_list, filtered_signal.real)
+            elif self.signal_mode == "upload":
+                filtered_signal = self.filter.apply_filter(self.signal_list[1])
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.signal_list[0], filtered_signal.real)
 
     def upload_signal(self ):
         options = QFileDialog.Options()
@@ -173,6 +216,9 @@ class MainApp(QMainWindow, FORM_CLASS):
 
         self.last_pos = event.pos()
 
+    def delayed_mouse_move_event(self, event, delay):
+        time.sleep(delay)  # Introduce a delay
+        self.widget_mouseMoveEvent(event)
 
     def generate_arbitrary_signal(self, time, frequency,mag):
 

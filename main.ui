@@ -14,9 +14,9 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_3">
+   <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -99,56 +99,143 @@
        </layout>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_11">
         <item>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <property name="sizeConstraint">
-             <enum>QLayout::SetFixedSize</enum>
-            </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>Mouse Input</string>
-              </property>
-             </widget>
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="text">
+                 <string>Add filter</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QLabel" name="label_2">
+                    <property name="text">
+                     <string> X </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit"/>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="label_3">
+                    <property name="text">
+                     <string> Y </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_2"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QPushButton" name="upload_signal_btn">
-              <property name="text">
-               <string>Upload Signal</string>
-              </property>
-             </widget>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QCheckBox" name="all_pass_filter_1">
+                <property name="text">
+                 <string>0.7</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="all_pass_filter_2">
+                <property name="text">
+                 <string>0.7j</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="all_pass_filter_3">
+                <property name="text">
+                 <string>0.1 + 0.7j</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="all_pass_filter_4">
+                <property name="text">
+                 <string>1 + 2j</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="all_pass_filter_5">
+                <property name="text">
+                 <string>0.3 + 0.2j</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </item>
-          <item row="0" column="1" rowspan="2">
-           <layout class="QVBoxLayout" name="verticalLayout_4">
-            <item>
-             <widget class="QComboBox" name="all_pass_lists"/>
-            </item>
-            <item>
-             <widget class="QGraphicsView" name="all_pass_graph"/>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <widget class="QWidget" name="widget" native="true">
-            <property name="autoFillBackground">
-             <bool>true</bool>
-            </property>
-           </widget>
+          <item>
+           <widget class="PlotWidget" name="all_pass_graph"/>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="PlotWidget" name="graphicsView_2"/>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QWidget" name="widget" native="true">
+              <property name="autoFillBackground">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetFixedSize</enum>
+              </property>
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Mouse Input</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="upload_signal_btn">
+                <property name="text">
+                 <string>Upload Signal</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="PlotWidget" name="graphicsView"/>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="PlotWidget" name="graphicsView_2"/>
+            </item>
+            <item>
+             <widget class="PlotWidget" name="graphicsView"/>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
