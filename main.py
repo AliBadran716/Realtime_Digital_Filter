@@ -43,9 +43,9 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.frequency = 0
         self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
         self.signal_list = []
-        self.signal_mode = ""
+        self.signal_mode = "upload"
         self.zplane = z_plane_plot(self.z_plane_plot)
-        self.filter = Filter(gain=0.5)
+        self.filter = Filter(gain=1)
         self.all_pass_filters = {}
         self.butterworthFilter = Filter(
             poles=[0.66045672 + 0.44332349j, 0.66045672 - 0.44332349j, 0.52429979 + 0.1457741j, 0.52429979 - 0.1457741j],
@@ -99,14 +99,11 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.phase_plot.plotItem.setLabel('left', 'Phase (radians)')
         self.phase_plot.plotItem.setLabel('bottom', 'Frequency (rad/sample)')
 
-
-
-
     def plot_frequency_response(self, frequency, magnitude, phase):
         # Plot magnitude response
         self.magnitude_plot.plot(frequency, magnitude, pen='b', clear=True)
         # Set labels and title
-        self.magnitude_plot.setLabel('left', 'Magnitude (dB)')
+        self.magnitude_plot.setLabel('left', 'Magnitude')
         self.magnitude_plot.setLabel('bottom', 'Frequency')
         self.magnitude_plot.setTitle('Frequency Response - Magnitude')
 
@@ -116,7 +113,6 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.phase_plot.setLabel('left', 'Phase (radians)')
         self.phase_plot.setLabel('bottom', 'Frequency')
         self.phase_plot.setTitle('Frequency Response - Phase')
-
 
     def handle_buttons(self):
         self.delete_btn.clicked.connect(self.delete)
@@ -136,12 +132,12 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.signal_list = pd.read_csv(self.file_path, header=None)
             time = np.arange(0, len(self.signal_list))
             self.graphicsView_2.clear()
-            self.graphicsView_2.plot(self.signal_list[1])
+            self.graphicsView_2.plot(self.signal_list[0], self.signal_list[1])
             self.signal_mode = "upload"
             # Apply the filter to the signal and plot the output
-            filtered_signal = self.filter.apply_filter(self.signal_list)
+            filtered_signal = self.filter.apply_filter(self.signal_list[1])
             self.graphicsView.clear()
-            self.graphicsView.plot(filtered_signal.real)
+            self.graphicsView.plot(self.signal_list[0], filtered_signal)
              
 
     def widget_mouseMoveEvent(self, event):
@@ -203,14 +199,16 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.filter.add_zero(zeros)
         self.filter.add_pole(poles)
         frequency, magnitude, phase = self.filter.get_response()
-        # print(frequency)
-        # print(magnitude)
-        # print(phase)
         self.plot_frequency_response(frequency, magnitude, phase)
         # Apply the filter to the signal and plot the output
-        filtered_signal = self.filter.apply_filter(self.signal_list)
-        self.graphicsView.clear()
-        self.graphicsView.plot(filtered_signal.real)
+        if self.signal_mode == "draw":
+            filtered_signal = self.filter.apply_filter(self.signal_list)
+            self.graphicsView.clear()
+            self.graphicsView.plot(self.signal_list, filtered_signal.real)
+        elif self.signal_mode == "upload":
+            filtered_signal = self.filter.apply_filter(self.signal_list[1])
+            self.graphicsView.clear()
+            self.graphicsView.plot(self.signal_list[0], filtered_signal.real)
         
 
 def main():  # method to start app
