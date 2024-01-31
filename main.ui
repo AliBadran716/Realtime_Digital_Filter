@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>881</width>
-    <height>499</height>
+    <width>1426</width>
+    <height>899</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -256,29 +256,15 @@ QComboBox:on { /* shift the text when the popup opens */
 </string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-             <widget class="QPushButton" name="apply_filter_btn">
-              <property name="text">
-               <string>Apply</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="move_btn">
-              <property name="text">
-               <string>Move</string>
-              </property>
-             </widget>
-            </item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QPushButton" name="delete_btn">
               <property name="text">
@@ -492,8 +478,8 @@ QComboBox:on { /* shift the text when the popup opens */
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>881</width>
-     <height>24</height>
+     <width>1426</width>
+     <height>23</height>
     </rect>
    </property>
   </widget>

@@ -41,6 +41,8 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.handle_graphs()
         self.handle_graphs()
         self.last_pos = None
+        self.x_list = []
+        self.y_list = []
         self.time = np.arange(0, 0.6, 0.2)
         self.frequency = 0
         self.widget.mouseMoveEvent = lambda event: self.delayed_mouse_move_event(event, 0.1)
@@ -126,7 +128,8 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.delete_btn.clicked.connect(self.delete)
         # self.move_btn.clicked.connect(self.move_marker)
         self.conjugate_check_box.stateChanged.connect(self.conjugate)
-        self.apply_filter_btn.clicked.connect(self.apply_filter)
+        self.z_plane_plot.scene().sigMouseClicked.connect(self.apply_filter)
+        # self.apply_filter_btn.clicked.connect(self.apply_filter)
         self.upload_signal_btn.clicked.connect(self.upload_signal)
         for i in range(5):
             getattr(self, 'all_pass_filter_' + str(i+1)).clicked.connect(self.update_all_pass_filter)
@@ -140,13 +143,11 @@ class MainApp(QMainWindow, FORM_CLASS):
             0.3 + 0.2j,
         ]
         for i in range(5):
-            print(i)
             self.all_pass_filters['all_pass_filter_' + str(i+1)] = [all_pass_list[i], getattr(self, 'all_pass_filter_' + str(i+1)).isChecked()]
-        print(self.all_pass_filters)
 
     def update_all_pass_filter(self):
         self.set_all_pass_filter()
-        self.filter.delete_all_components()
+        self.filter.delete_all_passes()
         for key, value in self.all_pass_filters.items():
             if value[1]:
                 self.filter.add_all_pass(value[0])
@@ -156,6 +157,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         # Plot the all pass phase response
         all_pass_phase, all_pass_freqs = self.filter.get_all_pass_phase_response()
         self.all_pass_graph.plot(all_pass_freqs, all_pass_phase, pen='r', clear=True)
+        self.apply_filter(None)
         if len(self.signal_list) >= 1:
             # Apply the filter to the signal and plot the output
             if self.signal_mode == "draw":
@@ -179,9 +181,6 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.signal_mode = "upload"
             # Apply the filter to the signal and plot the output
             filtered_signal = self.filter.apply_filter(self.signal_list[1])
-            self.graphicsView.clear()
-            self.graphicsView.plot(self.signal_list[0], filtered_signal)
-             
 
     def widget_mouseMoveEvent(self, event):
         # print(event.pos())
@@ -191,9 +190,12 @@ class MainApp(QMainWindow, FORM_CLASS):
             self.signal_mode = "draw"
         if self.last_pos:
             # Calculate mouse speed
+            self.x_list.append(event.x())
+            self.signal_list.append(event.x())
+            self.y_list.append(event.y())
             delta_x = event.x() - self.last_pos.x()
             delta_y = event.y() - self.last_pos.y()
-            speed = (delta_x**2 + delta_y**2)**0.5
+            speed = (delta_x ** 2 + delta_y ** 2) ** 0.5
 
             # Update frequency based on speed
             self.frequency = int(speed)  # Adjust this factor to control the sensitivity
@@ -202,17 +204,16 @@ class MainApp(QMainWindow, FORM_CLASS):
             # print(f"Mouse Speed: {speed:.2f} | Frequency: {self.frequency}")
 
             # Generate arbitrary signal based on frequency
-            signal = self.generate_arbitrary_signal(self.time, self.frequency,event.x())
-            
-            self.signal_list = self.signal_list + list(signal)
+            # signal = self.generate_arbitrary_signal(self.time, event.x()/5,event.y())
+
+            # self.signal_list = self.signal_list + list(signal)
             self.graphicsView_2.clear()
-            self.graphicsView_2.plot(self.signal_list)
+            self.graphicsView_2.plot(self.x_list)
 
             # Apply the filter to the signal and plot the output
             filtered_signal = self.filter.apply_filter(self.signal_list)
             self.graphicsView.clear()
             self.graphicsView.plot(filtered_signal.real)
-
 
         self.last_pos = event.pos()
 
@@ -220,26 +221,21 @@ class MainApp(QMainWindow, FORM_CLASS):
         time.sleep(delay)  # Introduce a delay
         self.widget_mouseMoveEvent(event)
 
-    def generate_arbitrary_signal(self, time, frequency,mag):
-
-        return mag*(np.sin(2 * np.pi * frequency * time) + np.sin(2 * np.pi * 2 * frequency * time)) / 2
+    def generate_arbitrary_signal(self, time, frequency, mag):
+        return np.cos(2 * np.pi * frequency * time) * mag
+        # return mag*(np.sin(2 * np.pi * frequency * time) + np.sin(2 * np.pi * 2 * frequency * time)) / 2
 
     def delete(self):
         to_be_deleted = self.selected_combo_box.currentText()
         self.zplane.delete_selected_marker(to_be_deleted)
-
-    def move_marker(self):
-        if self.move_btn.text() == "Move":
-            self.move_btn.setText("Add")
-            self.zplane.move_marker = True
-        else:
-            self.move_btn.setText("Move")
-            self.zplane.move_marker = False
+        self.apply_filter(None)
 
     def conjugate(self):
         self.zplane.conjugate = self.conjugate_check_box.isChecked()
 
-    def apply_filter(self):
+    def apply_filter(self, event):
+        if event:
+            self.zplane.mouse_clicked(event)
         zeros = self.zplane.get_zeros()
         poles = self.zplane.get_poles()
         self.filter.add_zero(zeros)
@@ -247,14 +243,15 @@ class MainApp(QMainWindow, FORM_CLASS):
         frequency, magnitude, phase = self.filter.get_response()
         self.plot_frequency_response(frequency, magnitude, phase)
         # Apply the filter to the signal and plot the output
-        if self.signal_mode == "draw":
-            filtered_signal = self.filter.apply_filter(self.signal_list)
-            self.graphicsView.clear()
-            self.graphicsView.plot(self.signal_list, filtered_signal.real)
-        elif self.signal_mode == "upload":
-            filtered_signal = self.filter.apply_filter(self.signal_list[1])
-            self.graphicsView.clear()
-            self.graphicsView.plot(self.signal_list[0], filtered_signal.real)
+        if len(self.signal_list) >= 1:
+            if self.signal_mode == "draw":
+                filtered_signal = self.filter.apply_filter(self.signal_list)
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.signal_list, filtered_signal.real)
+            elif self.signal_mode == "upload":
+                filtered_signal = self.filter.apply_filter(self.signal_list[1])
+                self.graphicsView.clear()
+                self.graphicsView.plot(self.signal_list[0], filtered_signal.real)
         
 
 def main():  # method to start app

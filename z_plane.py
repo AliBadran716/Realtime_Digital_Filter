@@ -20,8 +20,10 @@ class z_plane_plot():
         self.zeros = []  # List of zero markers
         self.poles = []  # List of pole markers
         self.selected_marker = None
+        self.selected_conjugated = None
         self.move_marker = False
         self.conjugate = False
+        self.conjugate_pair = []
 
         # Set up the z-plane plot
         self.setup_z_plane()
@@ -81,6 +83,7 @@ class z_plane_plot():
 
         # move at the middle mouse button click
         if event.button() != 1 and event.button() != 2:
+            index_conjugated = self.conjugate_marker()
             # Move the selected marker to the new location
             position, index, marker = self.selected_marker
             if position == 'zeros':
@@ -90,6 +93,17 @@ class z_plane_plot():
             # Update the marker's position and plot
             marker.setData(pos=np.array([[x, y]]))
             self.highlight_marker(marker)
+            # Move conjugate if exists
+            if self.selected_conjugated is not None:
+                position, index, marker = self.selected_conjugated
+                if position == 'zeros':
+                    self.zeros[index] = (marker, (x, -y))
+                elif position == 'poles':
+                    self.poles[index] = (marker, (x, -y))
+                # Update the marker's position and plot
+                marker.setData(pos=np.array([[x, -y]]))
+                self.highlight_marker(marker)
+                self.conjugate_pair[index_conjugated] = [marker, (x, -y)]
             return
 
         # Add a new marker based on left or right mouse button press
@@ -104,6 +118,7 @@ class z_plane_plot():
                 marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='o', pen='w')
                 self.widget.addItem(marker)
                 self.zeros.append((marker, (x, -y)))
+                self.conjugate_pair.append([marker, (x, -y)])
 
         elif event.button() == 2:  # Right button for poles
             marker = pg.ScatterPlotItem(pos=np.array([[x, y]]), symbol='x', pen='w')
@@ -116,6 +131,36 @@ class z_plane_plot():
                 marker = pg.ScatterPlotItem(pos=np.array([[x, -y]]), symbol='x', pen='w')
                 self.widget.addItem(marker)
                 self.poles.append((marker, (x, -y)))
+                self.conjugate_pair.append([marker, (x, -y)])
+
+    # Find the conjugate of the selected marker
+    def conjugate_marker(self):
+        if self.conjugate:
+            position, index, marker = self.selected_marker
+            conjugate_not_found = True
+            index_conjugated = None
+            if position == 'zeros':
+                x = self.zeros[index][1][0]
+                y = self.zeros[index][1][1]
+                for i in range(len(self.conjugate_pair)):
+                    if self.conjugate_pair[i][1][0] == x and self.conjugate_pair[i][1][1] == -y:
+                        self.selected_conjugated = ('zeros', i, self.conjugate_pair[i][0])
+                        conjugate_not_found = False
+                        index_conjugated = i
+            elif position == 'poles':
+                x = self.poles[index][1][0]
+                y = self.poles[index][1][1]
+                for i in range(len(self.conjugate_pair)):
+                    if self.conjugate_pair[i][1][0] == x and self.conjugate_pair[i][1][1] == -y:
+                        self.selected_conjugated = ('poles', i, self.conjugate_pair[i][0])
+                        conjugate_not_found = False
+                        index_conjugated = i
+
+            if conjugate_not_found:
+                self.selected_conjugated = None
+            else:
+                self.highlight_marker(self.selected_conjugated[2])
+                return index_conjugated
 
     def highlight_marker(self, marker):
         """Highlight the selected marker with a blue border."""
@@ -138,12 +183,20 @@ class z_plane_plot():
     def delete_selected_marker(self, to_be_deleted):
         """Delete the selected markers."""
         if to_be_deleted == "Selected" and self.selected_marker is not None:
+            index_conjugated = self.conjugate_marker()
             position, index, marker = self.selected_marker
             if position == 'zeros':
                 self.delete_marker('zeros', index)
             elif position == 'poles':
                 self.delete_marker('poles', index)
             self.selected_marker = None
+            if self.selected_conjugated is not None:
+                position, index, marker = self.selected_conjugated
+                if position == 'zeros':
+                    self.delete_marker('zeros', index)
+                elif position == 'poles':
+                    self.delete_marker('poles', index)
+                self.selected_conjugated = None
         elif to_be_deleted == "All zeros":
             self.delete_all_markers('zeros')
         elif to_be_deleted == "All poles":
@@ -171,9 +224,6 @@ class z_plane_plot():
         """Return the list of zeros."""
         complex_zeros = [complex(x, y) for _, (x, y) in self.zeros]
         return complex_zeros
-
-
-
 
     def get_poles(self):
         """Return the list of poles."""

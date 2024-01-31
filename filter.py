@@ -50,16 +50,11 @@ class Filter():
 
     def get_poles(self):
         """Return the list of poles."""
-        for all_pass in self.all_pass:
-            self.poles.append(all_pass)
         return self.poles
 
 
     def get_zeros(self):
         """Return the list of zeros."""
-        all_pass_zeros = [1 / np.conj(all_pass) for all_pass in self.all_pass]
-        for zeros in all_pass_zeros:
-            self.zeros.append(zeros)
         return self.zeros
 
 
@@ -109,8 +104,14 @@ class Filter():
 
     def get_phase_response(self):
         # Get the zeros and poles of the filter
+
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
+        all_pass_zeros = [1 / np.conj(all_pass) for all_pass in self.all_pass]
+        for zeros in all_pass_zeros:
+            zeros_values.append(zeros)
+        for all_pass in self.all_pass:
+            poles_values.append(all_pass)
         phase = []
         # loop on the unit circle
         for point in np.linspace(0,np.pi, 100):
@@ -157,6 +158,8 @@ class Filter():
             return None
         zeros_values = self.get_zeros()
         poles_values = self.get_poles()
+        if zeros_values == [] and poles_values == []:
+            return input_signal
         b, a = signal.zpk2tf(zeros_values, poles_values, 1)
         filtered_signal = signal.lfilter(b, a, input_signal)
         return filtered_signal
