@@ -57,6 +57,8 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.all_pass_graph.setLabel('left', 'Phase (radians)')
         self.all_pass_graph.setLabel('bottom', 'Frequency')
         self.all_pass_graph.setTitle('All Pass Phase Response')
+        
+        
 
         self.butterworthFilter = Filter(
             poles=[0.66045672 + 0.44332349j, 0.66045672 - 0.44332349j, 0.52429979 + 0.1457741j, 0.52429979 - 0.1457741j],
@@ -210,17 +212,34 @@ class MainApp(QMainWindow, FORM_CLASS):
             # self.signal_list = self.signal_list + list(signal)
             if len(self.x_list) < 500:
                 self.graphicsView_2.setXRange(0, len(self.x_list))
+                self.graphicsView.setXRange(0, len(self.x_list))
             else:
                 self.graphicsView_2.setXRange(len(self.x_list) - 500, len(self.x_list))
+                self.graphicsView.setXRange(len(self.x_list) - 500, len(self.x_list))
                 
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.x_list)
 
+
+            # Keep track of the length of the signal processed so far
+            signal_length = len(self.signal_list)
+            # Only send the last few points of the signal based on the filter order
+            self.filter_order = max(len(self.filter.zeros), len(self.filter.poles))
+            if signal_length < self.filter_order:
+                return
+            #print("order", self.filter_order)
+            #print("signal length", signal_length)
+            
+            start_index = max(0, signal_length - self.filter_order)
+            #print("start index", start_index)
+            filtered_signal = self.filter.apply_filter(self.signal_list[start_index:])
+
             # Apply the filter to the signal and plot the output
             filtered_signal = self.filter.apply_filter(self.signal_list)
+
             self.graphicsView.clear()
             self.graphicsView.plot(filtered_signal.real)
-
+            
         self.last_pos = event.pos()
 
     def delayed_mouse_move_event(self, event, delay):
