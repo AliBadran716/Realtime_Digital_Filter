@@ -45,7 +45,8 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.y_list = []
         self.time = np.arange(0, 0.6, 0.2)
         self.frequency = 0
-        self.widget.mouseMoveEvent = lambda event: self.delayed_mouse_move_event(event, 0.1)
+        self.widget.mouseMoveEvent = self.widget_mouseMoveEvent
+        # self.widget.mouseMoveEvent = lambda event: self.delayed_mouse_move_event(event, 0.1)
         self.signal_list = []
         self.signal_mode = "upload"
         self.zplane = z_plane_plot(self.z_plane_plot)
@@ -207,6 +208,11 @@ class MainApp(QMainWindow, FORM_CLASS):
             # signal = self.generate_arbitrary_signal(self.time, event.x()/5,event.y())
 
             # self.signal_list = self.signal_list + list(signal)
+            if len(self.x_list) < 500:
+                self.graphicsView_2.setXRange(0, len(self.x_list))
+            else:
+                self.graphicsView_2.setXRange(len(self.x_list) - 500, len(self.x_list))
+                
             self.graphicsView_2.clear()
             self.graphicsView_2.plot(self.x_list)
 
