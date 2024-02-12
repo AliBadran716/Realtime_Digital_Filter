@@ -57,7 +57,7 @@ class MainApp(QMainWindow, FORM_CLASS):
         self.all_pass_graph.setLabel('left', 'Phase (radians)')
         self.all_pass_graph.setLabel('bottom', 'Frequency')
         self.all_pass_graph.setTitle('All Pass Phase Response')
-        
+        self.drawn_filter = np.array([])
         
 
         self.butterworthFilter = Filter(
@@ -231,14 +231,20 @@ class MainApp(QMainWindow, FORM_CLASS):
             #print("signal length", signal_length)
             
             start_index = max(0, signal_length - self.filter_order)
+            
+            
             #print("start index", start_index)
-            filtered_signal = self.filter.apply_filter(self.signal_list[start_index:])
+            # start_index = 0
 
+            filtered_signal = self.filter.apply_filter(self.signal_list[start_index:])
+            print(len(filtered_signal))
+            self.drawn_filter = np.append(self.drawn_filter , filtered_signal[-1])
+            # print(len(self.drawn_filter))
             # Apply the filter to the signal and plot the output
-            filtered_signal = self.filter.apply_filter(self.signal_list)
+            # filtered_signal = self.filter.apply_filter(self.signal_list)
 
             self.graphicsView.clear()
-            self.graphicsView.plot(filtered_signal.real)
+            self.graphicsView.plot(self.drawn_filter.real)
             
         self.last_pos = event.pos()
 
@@ -272,7 +278,7 @@ class MainApp(QMainWindow, FORM_CLASS):
             if self.signal_mode == "draw":
                 filtered_signal = self.filter.apply_filter(self.signal_list)
                 self.graphicsView.clear()
-                self.graphicsView.plot(self.signal_list, filtered_signal.real)
+                # self.graphicsView.plot(self.signal_list, filtered_signal.real)
             elif self.signal_mode == "upload":
                 filtered_signal = self.filter.apply_filter(self.signal_list[1])
                 self.graphicsView.clear()
