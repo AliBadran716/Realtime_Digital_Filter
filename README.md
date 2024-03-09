@@ -7,67 +7,43 @@ The Realtime Digital Filter Design Application is a powerful tool designed for e
 
 ## Features
 
-### Step 1: Setting Up the User Interface
+### Graphical User Interface (GUI)
+- Utilizes a GUI library to create an intuitive main window with interactive elements.
+- Includes a canvas for the z-plane plot with the unit circle, providing a visual representation of filter design.
 
-1. **Graphical User Interface (GUI):**
-   - Utilizes a GUI library to create an intuitive main window.
-   - Includes a canvas for the z-plane plot with the unit circle, providing a visual representation of filter design.
+### Zeros/Poles Placement
+- Allows users to interactively place zeros and poles by clicking on the canvas.
+- Supports dragging for easy modification of zero and pole positions.
+- Provides options to add/delete zeros and poles, enhancing flexibility in filter design.
 
-2. **Zeros/Poles Placement:**
-   - Allows users to interactively place zeros and poles by clicking on the canvas.
-   - Supports dragging for easy modification of zero and pole positions.
-   - Provides options to add/delete zeros and poles, enhancing flexibility in filter design.
+### Clear and Conjugate Options
+- Offers buttons to clear all zeros, all poles, or both, facilitating quick adjustments to the filter design.
+- Includes a checkbox to enable/disable adding conjugates, allowing users to customize filter characteristics.
 
-3. **Clear and Conjugate Options:**
-   - Offers buttons to clear all zeros, all poles, or both, facilitating quick adjustments to the filter design.
-   - Includes a checkbox to enable/disable adding conjugates, allowing users to customize filter characteristics.
+### Frequency Response Plot
+- Displays separate graphs for magnitude and phase responses, enabling detailed analysis of filter performance.
+- Updates plots dynamically as users modify zeros and poles, providing real-time feedback during design iterations.
 
-### Step 2: Frequency Response Plot
+### Real-time Filtering
+- Implements signal processing functions using the designed filter for real-time filtering.
+- Visualizes the time progress of the input signal and filtered output, facilitating performance evaluation.
+- Includes a slider for controlling the speed/temporal-resolution of the filtering process, offering flexibility in real-time analysis.
+- Allows users to input real-time signals by moving the mouse, providing an intuitive interface for signal generation.
+- Maps mouse motion to signal frequency, enabling users to control the input signal characteristics.
 
-4. **Magnitude and Phase Response:**
-   - Displays separate graphs for magnitude and phase responses, enabling detailed analysis of filter performance.
-   - Updates plots dynamically as users modify zeros and poles, providing real-time feedback during design iterations.
+### All-Pass Filters
+- Provides a library of pre-defined all-pass filters with visualizations, offering users a range of options for phase correction.
+- Implements a feature to design custom all-pass filters by specifying parameters, allowing for fine-tuning of phase correction.
+- Offers drop-down menus or checkboxes to enable/disable added all-pass elements, providing control over filter configuration.
 
-### Step 3: Real-time Filtering
+### Phase Correction
+- Implements the addition of all-pass filters to correct phase distortions in the signal, enhancing filter performance.
+- Allows users to pick and visualize all-pass filters from the library, facilitating easy integration into the filter design.
 
-5. **Lengthy Signal Processing:**
-   - Implements signal processing functions using the designed filter for real-time filtering.
-   - Visualizes the time progress of the input signal and filtered output, facilitating performance evaluation.
-
-6. **Temporal Resolution Control:**
-   - Includes a slider for controlling the speed/temporal-resolution of the filtering process, offering flexibility in real-time analysis.
-
-7. **Mouse Input for Real-time Signal:**
-   - Allows users to input real-time signals by moving the mouse, providing an intuitive interface for signal generation.
-   - Maps mouse motion to signal frequency, enabling users to control the input signal characteristics.
-
-### Step 4: All-Pass Filters
-
-8. **Library of All-Pass Filters:**
-   - Provides a library of pre-defined all-pass filters with visualizations, offering users a range of options for phase correction.
-
-9. **Custom All-Pass Design:**
-   - Implements a feature to design custom all-pass filters by specifying parameters, allowing for fine-tuning of phase correction.
-
-10. **Enable/Disable All-Pass Elements:**
-    - Offers drop-down menus or checkboxes to enable/disable added all-pass elements, providing control over filter configuration.
-
-### Step 5: Phase Correction
-
-11. **Automatic Phase Correction:**
-    - Implements the addition of all-pass filters to correct phase distortions in the signal, enhancing filter performance.
-
-12. **User Selection of All-Pass Filters:**
-    - Allows users to pick and visualize all-pass filters from the library, facilitating easy integration into the filter design.
-
-### Step 6: Testing and Optimization
-
-13. **Testing:**
-    - Enables thorough testing of the application with various scenarios, ensuring robust performance under different conditions.
-    - Validates real-time processing functionality to meet user expectations.
-
-14. **Optimization:**
-    - Optimizes the application for performance, especially during real-time signal processing, ensuring smooth and efficient operation.
+### Testing and Optimization
+- Enables thorough testing of the application with various scenarios, ensuring robust performance under different conditions.
+- Validates real-time processing functionality to meet user expectations.
+- Optimizes the application for performance, especially during real-time signal processing, ensuring smooth and efficient operation.
 
 ## How to Use
 
