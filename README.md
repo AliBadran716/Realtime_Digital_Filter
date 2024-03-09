@@ -1,90 +1,123 @@
 # Realtime Digital Filter Design Application
+![Digital-Filter](https://github.com/Muhannad159/Realtime-Digital-Filter/assets/104541242/c755c7bd-3fdc-4214-a0b5-8ac6c747df28)
 
-## Step 1: Setting Up the User Interface
+## Overview
 
-1. **Create a Graphical User Interface (GUI):**
-   - Utilize a GUI library to design the main window.
-   - Add a canvas for the z-plane plot with the unit circle.
+The Realtime Digital Filter Design Application is a powerful tool designed for engineers and researchers to design and analyze digital filters in real-time. This application provides a comprehensive set of features for designing, visualizing, and optimizing digital filters, making it an invaluable resource for signal processing tasks.
 
-2. **Implement Zeros/Poles Placement:**
-   - Allow users to click on the canvas to place zeros and poles.
-   - Enable dragging for modifying the placement.
-   - Implement the option to add/delete zeros and poles.
+## Features
+
+### Step 1: Setting Up the User Interface
+
+1. **Graphical User Interface (GUI):**
+   - Utilizes a GUI library to create an intuitive main window.
+   - Includes a canvas for the z-plane plot with the unit circle, providing a visual representation of filter design.
+
+2. **Zeros/Poles Placement:**
+   - Allows users to interactively place zeros and poles by clicking on the canvas.
+   - Supports dragging for easy modification of zero and pole positions.
+   - Provides options to add/delete zeros and poles, enhancing flexibility in filter design.
 
 3. **Clear and Conjugate Options:**
-   - Add buttons to clear all zeros, all poles, or both.
-   - Provide a checkbox to enable/disable adding conjugates.
+   - Offers buttons to clear all zeros, all poles, or both, facilitating quick adjustments to the filter design.
+   - Includes a checkbox to enable/disable adding conjugates, allowing users to customize filter characteristics.
 
-## Step 2: Frequency Response Plot
+### Step 2: Frequency Response Plot
 
 4. **Magnitude and Phase Response:**
-   - Display two separate graphs for magnitude and phase responses.
-   - Update the plots dynamically as users modify zeros and poles.
+   - Displays separate graphs for magnitude and phase responses, enabling detailed analysis of filter performance.
+   - Updates plots dynamically as users modify zeros and poles, providing real-time feedback during design iterations.
 
-## Step 3: Real-time Filtering
+### Step 3: Real-time Filtering
 
 5. **Lengthy Signal Processing:**
-   - Implement a signal processing function using the designed filter.
-   - Create graphs to show the time progress of the input signal and filtered output.
+   - Implements signal processing functions using the designed filter for real-time filtering.
+   - Visualizes the time progress of the input signal and filtered output, facilitating performance evaluation.
 
 6. **Temporal Resolution Control:**
-   - Add a slider for controlling the speed/temporal-resolution of the filtering process.
+   - Includes a slider for controlling the speed/temporal-resolution of the filtering process, offering flexibility in real-time analysis.
 
 7. **Mouse Input for Real-time Signal:**
-   - Allow users to input real-time signals by moving the mouse.
-   - Map mouse motion to signal frequency.
+   - Allows users to input real-time signals by moving the mouse, providing an intuitive interface for signal generation.
+   - Maps mouse motion to signal frequency, enabling users to control the input signal characteristics.
 
-## Step 4: All-Pass Filters
+### Step 4: All-Pass Filters
 
 8. **Library of All-Pass Filters:**
-   - Create a library of pre-defined all-pass filters with visualizations.
+   - Provides a library of pre-defined all-pass filters with visualizations, offering users a range of options for phase correction.
 
 9. **Custom All-Pass Design:**
-   - Implement a feature to design custom all-pass filters by specifying parameters.
+   - Implements a feature to design custom all-pass filters by specifying parameters, allowing for fine-tuning of phase correction.
 
 10. **Enable/Disable All-Pass Elements:**
-    - Add a drop-menu or checkboxes group to enable/disable added all-pass elements.
+    - Offers drop-down menus or checkboxes to enable/disable added all-pass elements, providing control over filter configuration.
 
-## Step 5: Phase Correction
+### Step 5: Phase Correction
 
 11. **Automatic Phase Correction:**
-    - Implement the addition of all-pass filters to correct the phase.
+    - Implements the addition of all-pass filters to correct phase distortions in the signal, enhancing filter performance.
 
 12. **User Selection of All-Pass Filters:**
-    - Allow users to pick and visualize all-pass filters from the library.
+    - Allows users to pick and visualize all-pass filters from the library, facilitating easy integration into the filter design.
 
-## Step 6: Testing and Optimization
+### Step 6: Testing and Optimization
 
 13. **Testing:**
-    - Thoroughly test the application with various scenarios.
-    - Ensure real-time processing works as expected.
+    - Enables thorough testing of the application with various scenarios, ensuring robust performance under different conditions.
+    - Validates real-time processing functionality to meet user expectations.
 
 14. **Optimization:**
-    - Optimize the application for performance, especially during real-time signal processing.
+    - Optimizes the application for performance, especially during real-time signal processing, ensuring smooth and efficient operation.
 
-## Step 7: Documentation and User Guidance
+## How to Use
 
-15. **User Guide:**
-    - Create a user guide or help section explaining how to use the application.
-    - Provide information on the purpose and functionality of each feature.
+1. **Download and Installation:** Clone the repository and install any required dependencies.
+2. **Launch the Application:** Run the main script to launch the application.
+3. **Design Filters:** Use the intuitive user interface to design digital filters, placing zeros and poles as needed.
+4. **Visualize Responses:** View magnitude and phase responses in real-time, adjusting filter parameters as necessary.
+5. **Apply Real-time Filtering:** Utilize the application for real-time filtering of input signals, monitoring time progress and output characteristics.
+6. **Experiment with All-Pass Filters:** Explore the library of pre-defined and custom all-pass filters for phase correction.
+7. **Test and Optimize:** Thoroughly test the application with various scenarios and optimize performance for seamless user experience.
 
-16. **Documentation:**
-    - Document the code for future maintenance and updates.
+## Dependencies
 
-## Step 8: Finalization
+- Python
+- PyQt
+- NumPy
+- Matplotlib
+- SciPy
 
-17. **Polishing:**
-    - Enhance the UI for a polished look.
-    - Implement error handling for user input.
+## Contributors <a name = "Contributors"></a>
 
-18. **Deployment:**
-    - Package the application for easy deployment on desktop platforms.
+<table>
+  <tr>
+    <td align="center">
+    <a href="https://github.com/Muhannad159" target="_black">
+    <img src="https://avatars.githubusercontent.com/u/104541242?v=4" width="150px;" alt="Muhannad Abdallah"/>
+    <br />
+    <sub><b>Muhannad Abdallah</b></sub></a>
+    </td>
+  <td align="center">
+    <a href="https://github.com/AliBadran716" target="_black">
+    <img src="https://avatars.githubusercontent.com/u/102072821?v=4" width="150px;" alt="Ali Badran"/>
+    <br />
+    <sub><b>Ali Badran</b></sub></a>
+    </td>
+     <td align="center">
+    <a href="https://github.com/ahmedalii3" target="_black">
+    <img src="https://avatars.githubusercontent.com/u/110257687?v=4" width="150px;" alt="Ahmed Ali"/>
+    <br />
+    <sub><b>Ahmed Ali</b></sub></a>
+    </td>
+<td align="center">
+    <a href="https://github.com/ossama971" target="_black">
+    <img src="https://avatars.githubusercontent.com/u/40814982?v=4" width="150px;" alt="Hassan Hussein"/>
+    <br />
+    <sub><b>Osama Badawi</b></sub></a>
+    </td>
+      </tr>
+ </table>
 
-## Step 9: Continuous Improvement
 
-19. **Gather Feedback:**
-    - Collect user feedback for future improvements.
-    - Consider user suggestions for additional features.
 
-20. **Updates:**
-    - Release updates to address bugs and add new features based on user feedback. 
+
