@@ -7,43 +7,21 @@ The Realtime Digital Filter Design Application is a powerful tool designed for e
 
 ## Features
 
-### Graphical User Interface (GUI)
-- Utilizes a GUI library to create an intuitive main window with interactive elements.
-- Includes a canvas for the z-plane plot with the unit circle, providing a visual representation of filter design.
+This desktop application facilitates the design of custom digital filters through intuitive zeros-poles placement on the z-plane. Key features include:
 
-### Zeros/Poles Placement
-- Allows users to interactively place zeros and poles by clicking on the canvas.
-- Supports dragging for easy modification of zero and pole positions.
-- Provides options to add/delete zeros and poles, enhancing flexibility in filter design.
+1. **Interactive Z-Plane Plot**: Users can place zeros and poles on the z-plane using an interactive plot, with options to modify their positions by dragging, delete them individually, or clear all zeros/poles at once. The application also provides the flexibility to add or remove conjugates for complex elements.
 
-### Clear and Conjugate Options
-- Offers buttons to clear all zeros, all poles, or both, facilitating quick adjustments to the filter design.
-- Includes a checkbox to enable/disable adding conjugates, allowing users to customize filter characteristics.
+2. **Frequency Response Visualization**: The application generates graphs displaying the magnitude and phase response corresponding to the placed elements, offering users insights into the behavior of their designed filter.
 
-### Frequency Response Plot
-- Displays separate graphs for magnitude and phase responses, enabling detailed analysis of filter performance.
-- Updates plots dynamically as users modify zeros and poles, providing real-time feedback during design iterations.
+3. **Real-time Signal Filtering**: Users can apply the designed filter to lengthy signals in real-time, with the ability to control the speed/temporal-resolution of the filtering process. The application displays the time progress of both the original signal and the filtered signal, allowing users to visualize the filtering process dynamically.
 
-### Real-time Filtering
-- Implements signal processing functions using the designed filter for real-time filtering.
-- Visualizes the time progress of the input signal and filtered output, facilitating performance evaluation.
-- Includes a slider for controlling the speed/temporal-resolution of the filtering process, offering flexibility in real-time analysis.
-- Allows users to input real-time signals by moving the mouse, providing an intuitive interface for signal generation.
-- Maps mouse motion to signal frequency, enabling users to control the input signal characteristics.
+4. **Input Signal Generation**: Users can input an arbitrary real-time signal by moving the mouse on a designated area. The speed of mouse movement determines the frequency content of the generated signal, enabling users to explore different frequency ranges conveniently.
 
-### All-Pass Filters
-- Provides a library of pre-defined all-pass filters with visualizations, offering users a range of options for phase correction.
-- Implements a feature to design custom all-pass filters by specifying parameters, allowing for fine-tuning of phase correction.
-- Offers drop-down menus or checkboxes to enable/disable added all-pass elements, providing control over filter configuration.
+5. **Phase Correction with All-Pass Filters**: The application offers a library of all-pass filters for phase correction, allowing users to select and integrate suitable filters into their design. Users can also create custom all-pass filters by specifying parameters, giving them full control over phase correction.
 
-### Phase Correction
-- Implements the addition of all-pass filters to correct phase distortions in the signal, enhancing filter performance.
-- Allows users to pick and visualize all-pass filters from the library, facilitating easy integration into the filter design.
+6. **User-friendly Interface**: The application features an intuitive user interface, making it easy for users to navigate and utilize the various functionalities provided. Dropdown menus and checkboxes allow for seamless enabling/disabling of added all-pass elements.
 
-### Testing and Optimization
-- Enables thorough testing of the application with various scenarios, ensuring robust performance under different conditions.
-- Validates real-time processing functionality to meet user expectations.
-- Optimizes the application for performance, especially during real-time signal processing, ensuring smooth and efficient operation.
+Explore the capabilities of this application by visiting the provided examples and experience the convenience of designing and implementing digital filters effortlessly.
 
 ## How to Use
 
