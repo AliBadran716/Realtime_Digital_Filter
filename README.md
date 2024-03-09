@@ -87,4 +87,4 @@
     - Consider user suggestions for additional features.
 
 20. **Updates:**
-    - Release updates to address bugs and add new features based on user feedback.
+    - Release updates to address bugs and add new features based on user feedback. 
